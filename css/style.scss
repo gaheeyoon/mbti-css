@@ -1,0 +1,29 @@
+// Custom.scss
+// Option A: Include all of Bootstrap
+$primary: #B3D9D6;
+$light: #FEFCF4;
+$secondary: #936A60;
+
+// Include any default variable overrides here (though functions won't be available)
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+body {
+    font-family: BMYEONSUNG;
+    background-color: $light;
+}
+
+.mt-30 {
+    margin-top: 30px;
+}
+
+.mt-100 {
+    margin-top: 100px;
+}
+
+@font-face {
+    font-family: 'BMYEONSUNG';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMYEONSUNG.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}

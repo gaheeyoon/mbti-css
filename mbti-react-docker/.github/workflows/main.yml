@@ -1,0 +1,36 @@
+name: Deploy with Docker
+# 내가 만드는 이름이다 뭐든 상관없다
+
+on:
+  push:
+    branches: [ main ]
+    # 무슨 브랜치가 업데이트 될 때 Actions 를 작동시킬지 적는다.
+    # develop 브랜치로 개발하며 완료되면 main 에 머지해 Actions 를 작동시키면 조금 더 안전하겠지.
+    # 여러개 적어도 된다.
+
+env:
+  DOCKER_IMAGE: 5312559/mbti-app
+  VERSION: ${{ github.sha }}
+  NAME: mbti
+  # Docker image 를 ghcr.io 에 올릴 때 우리의github이름/이미지이름 으로 저장한다. 이미지이름을 정해주면 된다.
+  # Docker image 의 이름을 superman 이라고 해놓은 것. 이름 뭐할지 정하면 된다.
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: [ self-hosted, label-mbti ]
+    # label-superman 라는 이름으로 AWS EC2 가 Runner 를 작동시킬 때 사용했던 그 label
+    steps:
+      - name: Login to ghcr
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+      
+      - name: Docker run
+        run: |
+          docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
+          docker run -d -p 80:80 --name mbti --restart always ${{ env.DOCKER_IMAGE }}:latest
+          
+          
